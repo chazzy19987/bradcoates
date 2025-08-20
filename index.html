@@ -3,193 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brad Coates - Personal Website</title>
+    <title>Brad Coates - Telecom Consultant</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="#home">Brad Coates</a>
-            </div>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#home" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#projects" class="nav-link">Projects</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link">Contact</a>
-                </li>
-            </ul>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </div>
-    </nav>
-
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title">Hi, I'm Brad Coates</h1>
-                <p class="hero-subtitle">Software Developer & Creative Problem Solver</p>
-                <p class="hero-description">
-                    I build modern web applications and solve complex technical challenges. 
-                    Passionate about clean code, user experience, and continuous learning.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">View My Work</a>
-                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+    <div class="container">
+        <div class="profile-section">
+            <div class="profile-image">
+                <!-- Replace with your actual photo -->
+                <div class="photo-placeholder">
+                    <span>📸</span>
                 </div>
             </div>
-            <div class="hero-image">
-                <div class="profile-placeholder">
-                    <i class="fas fa-user"></i>
+            
+            <div class="bio-content">
+                <h1>Brad Coates</h1>
+                <p class="tagline">Telecom Consultant</p>
+                
+                <div class="bio-text">
+                    <p>I'm a telecom consultant helping carriers, MVNOs, MVNEs, and ISPs launch and grow modern mobile services — with less complexity and way fewer headaches.</p>
+                    
+                    <p>Over the past 13+ years, I've led product, engineering, and GTM for some of the most respected names in telecom. I've built full-stack BSS/OSS systems, scaled subscriber bases into the hundreds of thousands, and helped teams go from "we should do mobile" to "we just launched."</p>
+                    
+                    <p>My sweet spot: eSIM-first, app-based onboarding and activation flows that users actually enjoy — while increasing revenue, retention, and operational efficiency.</p>
+                    
+                    <p>I work across product strategy, vendor selection, architecture, and rollout — helping teams move faster with scalable, modern systems.</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>
-                        I'm a passionate software developer with expertise in modern web technologies. 
-                        I love creating intuitive user experiences and building scalable applications 
-                        that make a difference.
-                    </p>
-                    <p>
-                        When I'm not coding, you can find me exploring new technologies, contributing 
-                        to open source projects, or sharing knowledge with the developer community.
-                    </p>
-                    <div class="skills">
-                        <h3>Skills & Technologies</h3>
-                        <div class="skill-tags">
-                            <span class="skill-tag">JavaScript</span>
-                            <span class="skill-tag">React</span>
-                            <span class="skill-tag">Node.js</span>
-                            <span class="skill-tag">Python</span>
-                            <span class="skill-tag">HTML/CSS</span>
-                            <span class="skill-tag">Git</span>
-                            <span class="skill-tag">AWS</span>
-                            <span class="skill-tag">Docker</span>
-                        </div>
+                
+                <div class="cta-section">
+                    <p class="cta-question">Thinking about launching a mobile service — or fixing the one you've got?</p>
+                    <p class="cta-text">Let's talk.</p>
+                    
+                    <div class="contact-info">
+                        <p>Text/Call me at <a href="tel:647-521-5330">647-521-5330</a></p>
+                        <p>or</p>
+                        <a href="https://unchartedmobile.com" class="cta-button" target="_blank">check out my site</a>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="project-content">
-                        <h3>Project One</h3>
-                        <p>A modern web application built with React and Node.js, featuring real-time updates and responsive design.</p>
-                        <div class="project-tech">
-                            <span>React</span>
-                            <span>Node.js</span>
-                            <span>MongoDB</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="project-content">
-                        <h3>Project Two</h3>
-                        <p>A mobile-first responsive website with advanced animations and modern UI/UX principles.</p>
-                        <div class="project-tech">
-                            <span>HTML5</span>
-                            <span>CSS3</span>
-                            <span>JavaScript</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="project-content">
-                        <h3>Project Three</h3>
-                        <p>A data visualization dashboard that transforms complex data into actionable insights.</p>
-                        <div class="project-tech">
-                            <span>Python</span>
-                            <span>D3.js</span>
-                            <span>Flask</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Let's Connect</h3>
-                    <p>I'm always interested in new opportunities and collaborations. Feel free to reach out!</p>
-                    <div class="contact-links">
-                        <a href="mailto:your.email@example.com" class="contact-link">
-                            <i class="fas fa-envelope"></i>
-                            your.email@example.com
-                        </a>
-                        <a href="https://github.com/yourusername" class="contact-link" target="_blank">
-                            <i class="fab fa-github"></i>
-                            GitHub
-                        </a>
-                        <a href="https://linkedin.com/in/yourusername" class="contact-link" target="_blank">
-                            <i class="fab fa-linkedin"></i>
-                            LinkedIn
-                        </a>
-                        <a href="https://twitter.com/yourusername" class="contact-link" target="_blank">
-                            <i class="fab fa-twitter"></i>
-                            Twitter
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Brad Coates. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+    </div>
 </body>
 </html>
