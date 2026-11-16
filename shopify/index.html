@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopify Wireless: a proposal from Brad Coates</title>
+<meta name="description" content="Why Shopify should launch an MVNO, what it would look like inside the Shopify admin, and why Brad Coates is the person to build it.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Shopify Wireless: a proposal from Brad Coates">
+<meta property="og:description" content="Shopify became the merchant’s bank. Next, it should be their carrier.">
+<meta property="og:url" content="https://bradcoates.ca/shopify">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Inter+Tight:wght@500..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#000;
+  --ink:#303030;
+  --ink-2:#616161;
+  --ink-3:#8a8a8a;
+  --canvas:#f1f1f1;
+  --line:#e3e3e3;
+  --paper:#fff;
+  --brand:#95bf47;
+  --deep:#0c5132;
+  --mint:#cdfee1;
+  --link:#005bd3;
+  --magic:#5700d1;
+  --magic-bg:#f5efff;
+  --display:"Inter Tight", Inter, system-ui, -apple-system, sans-serif;
+  --text:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --wrap:1200px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:72px}
+body{margin:0;font-family:var(--text);font-size:18px;line-height:1.55;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit}
+img,svg{display:block}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 32px}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+sup{font-size:.6em;line-height:0;vertical-align:.65em;font-weight:600}
+sup a{text-decoration:none;color:var(--ink-3);padding:0 1px}
+sup a:hover{color:var(--ink)}
+
+/* ---------- Nav ---------- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);-webkit-backdrop-filter:saturate(180%) blur(12px);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;height:64px;gap:32px}
+.wordmark{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.02em;text-decoration:none;color:#000;white-space:nowrap}
+.wordmark span{font-weight:500;color:var(--ink-2)}
+.nav-links{display:flex;gap:28px;margin-left:auto;font-size:15px;font-weight:500}
+.nav-links a{text-decoration:none;color:var(--ink)}
+.nav-links a:hover{color:#000;text-decoration:underline;text-underline-offset:4px}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border-radius:999px;font:600 16px/1 var(--text);text-decoration:none;border:0;cursor:pointer;white-space:nowrap;transition:background-color .15s, box-shadow .15s}
+.pill-sm{height:40px;padding:0 18px;font-size:15px}
+.pill-dark{background:#000;color:#fff}
+.pill-dark:hover{background:#303030}
+.pill-light{background:#fff;color:#000}
+.pill-light:hover{background:#e3e3e3}
+.pill-ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45)}
+.pill-ghost:hover{box-shadow:inset 0 0 0 1.5px #fff}
+.nav .pill{margin-left:0}
+
+/* ---------- Hero ---------- */
+.hero{background:var(--black);color:#fff;padding:88px 0 104px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.85fr);gap:56px;align-items:center}
+.hero-kicker{font-size:17px;color:rgba(255,255,255,.7);margin:0 0 28px}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(46px,6vw,84px);line-height:.98;letter-spacing:-.042em;margin:0 0 32px}
+.hero-lede{font-size:20px;line-height:1.5;color:rgba(255,255,255,.78);max-width:33em;margin:0 0 40px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+
+.phone{width:330px;max-width:100%;aspect-ratio:9/19;margin:0 auto;border-radius:54px;background:#1c1c1e;padding:11px;box-shadow:0 0 0 1px #3a3a3c,0 30px 80px rgba(0,0,0,.6)}
+.phone-screen{position:relative;height:100%;border-radius:44px;background:var(--deep);overflow:hidden;padding:60px 12px 18px;display:flex;flex-direction:column}
+.island{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:104px;height:30px;border-radius:20px;background:#000}
+.ls-date{text-align:center;font-size:15px;font-weight:500;color:rgba(255,255,255,.86)}
+.ls-time{text-align:center;font-family:var(--display);font-size:82px;font-weight:600;line-height:1;letter-spacing:-.03em;color:rgba(255,255,255,.96);margin:2px 0 0}
+.notifs{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.notif{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;padding:11px 13px;border-radius:20px;background:rgba(246,246,246,.9);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);color:#111;font-size:13px;line-height:1.35;opacity:0;animation:notif-in .6s cubic-bezier(.2,.8,.2,1) forwards}
+.notif-icon{width:34px;height:34px;border-radius:9px;background:var(--brand);display:grid;place-items:center;color:#fff}
+.notif.ai .notif-icon{background:var(--magic)}
+.notif-head{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#6b6b6b}
+.notif-title{font-weight:650;font-size:13.5px;margin:1px 0 1px}
+.n-call{animation-delay:.6s}
+.n-ai{animation-delay:2s}
+.n-lead{animation-delay:3.4s}
+@keyframes notif-in{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+
+/* ---------- Generic sections ---------- */
+.sec{padding:120px 0}
+.sec-canvas{background:var(--canvas)}
+.sec h2{font-family:var(--display);font-weight:600;font-size:clamp(36px,4.4vw,60px);line-height:1.02;letter-spacing:-.035em;margin:0;color:#000;max-width:16em}
+.lede{font-size:20px;line-height:1.55;color:var(--ink-2);max-width:40em;margin:24px 0 0}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:start}
+.prose p{margin:0 0 20px;max-width:36em}
+.prose p:last-child{margin-bottom:0}
+
+/* Ledger table (why now + fit) */
+.ledger{width:100%;border-collapse:collapse;margin-top:72px;font-size:17px}
+.ledger th,.ledger td{text-align:left;vertical-align:top;padding:24px 28px 24px 0;border-bottom:1px solid var(--line)}
+.ledger thead th{font-size:15px;font-weight:600;color:var(--ink-2);padding-top:0;padding-bottom:14px;border-bottom:2px solid #000}
+.ledger tbody th{font-family:var(--display);font-size:22px;font-weight:600;letter-spacing:-.02em;color:#000;width:22%;line-height:1.2}
+.ledger td{color:var(--ink);width:39%}
+.ledger td.gap{color:#000;font-weight:550}
+.ledger td:last-child,.ledger th:last-child{padding-right:0}
+
+/* Before / after table */
+.ba{width:100%;border-collapse:separate;border-spacing:0;margin-top:72px;font-size:18px;line-height:1.5}
+.ba th,.ba td{text-align:left;vertical-align:top;padding:24px 28px;border-bottom:1px solid var(--line)}
+.ba thead th,.ba thead td{font-size:16px;font-weight:600;padding-top:20px;padding-bottom:16px;border-bottom:2px solid #000}
+.ba thead th.ba-today{color:var(--ink-2)}
+.ba thead th.ba-after{color:var(--deep);background:#effbf3;border-radius:16px 16px 0 0;border-bottom-color:var(--deep)}
+.ba tbody th{width:22%;padding-left:0;font-family:var(--display);font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.2;color:#000}
+.ba td.ba-today{width:39%;color:var(--ink-2)}
+.ba td.ba-after{width:39%;color:#000;font-weight:550;background:#effbf3;border-bottom-color:rgba(12,81,50,.14)}
+.ba tbody tr:last-child th,.ba tbody tr:last-child td{border-bottom:0}
+.ba tbody tr:last-child td.ba-after{border-radius:0 0 16px 16px}
+
+/* Reasons */
+.reason-group{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:64px;padding:56px 0;border-top:1px solid var(--line)}
+.reason-group:first-of-type{margin-top:64px;border-top:2px solid #000}
+.reason-group h3{font-family:var(--display);font-size:28px;font-weight:600;letter-spacing:-.025em;line-height:1.1;margin:0;color:#000}
+.reason-group .group-note{color:var(--ink-2);font-size:16px;margin:12px 0 0;max-width:22em}
+.reasons{display:grid;gap:36px}
+.reason h4{font-size:20px;font-weight:650;letter-spacing:-.01em;margin:0 0 8px;color:#000}
+.reason p{margin:0;color:var(--ink);max-width:38em}
+.reason .phase-chip{margin-left:8px;vertical-align:3px}
+
+.phase-chip{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:8px;font:600 13px/1 var(--text);background:var(--mint);color:var(--deep);white-space:nowrap}
+.phase-chip.full{background:var(--magic-bg);color:var(--magic)}
+
+/* ---------- Showcase / tabs ---------- */
+.tabs{display:flex;gap:4px;padding:5px;background:#e3e3e3;border-radius:999px;width:max-content;max-width:100%;overflow-x:auto;margin:48px 0 28px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;border:0;background:transparent;font:600 15px/1 var(--text);padding:12px 18px;border-radius:999px;color:var(--ink);cursor:pointer;white-space:nowrap}
+.tab:hover{background:rgba(255,255,255,.55)}
+.tab[aria-selected="true"]{background:#fff;color:#000;box-shadow:0 1px 2px rgba(0,0,0,.14)}
+.caption{display:none;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:start;margin-bottom:24px}
+.caption.on{display:grid}
+.caption p{margin:0;max-width:44em;color:var(--ink)}
+.caption b{color:#000}
+
+/* ---------- Admin mockup (Polaris-flavoured) ---------- */
+.admin{border-radius:16px;overflow:hidden;background:#1a1a1a;box-shadow:0 1px 2px rgba(0,0,0,.1),0 30px 70px -24px rgba(0,0,0,.35);font-size:13px;line-height:20px;color:#303030;font-weight:450}
+.admin-top{height:56px;display:flex;align-items:center;gap:16px;padding:0 14px 0 18px;color:#e3e3e3}
+.admin-mark{font-weight:650;font-size:13px;color:#fff;white-space:nowrap}
+.admin-mark span{color:#a6a6a6;font-weight:500}
+.admin-search{flex:1;max-width:480px;margin:0 auto;height:34px;border-radius:10px;background:#303030;display:flex;align-items:center;gap:8px;padding:0 12px;color:#a6a6a6;box-shadow:inset 0 0 0 1px #4a4a4a}
+.admin-search kbd{margin-left:auto;font:500 11px/1 var(--text);color:#a6a6a6;background:#404040;border-radius:5px;padding:4px 6px}
+.admin-user{display:flex;align-items:center;gap:8px;font-weight:550;color:#e3e3e3;white-space:nowrap}
+.avatar{width:28px;height:28px;border-radius:8px;background:#ffd6a4;color:#5e4200;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.admin-body{display:grid;grid-template-columns:224px minmax(0,1fr);background:#ebebeb;border-radius:12px 12px 0 0}
+.admin-nav{padding:12px 8px 16px}
+.nav-item{display:flex;align-items:center;gap:8px;height:30px;padding:0 8px;border-radius:8px;font-weight:550;color:#303030}
+.nav-item svg{width:20px;height:20px;color:#4a4a4a;flex:none}
+.nav-item.active{background:#fff;font-weight:650;color:#000}
+.nav-item.active svg{color:#000}
+.nav-sub{display:block;height:28px;line-height:28px;padding:0 8px 0 36px;border-radius:8px;font-weight:450;color:#4a4a4a}
+.nav-sub.active{background:#fafafa;font-weight:650;color:#000}
+.nav-label{font-size:12px;font-weight:550;color:#616161;padding:16px 8px 4px}
+.nav-new{margin-left:auto;font-size:11px;font-weight:600;background:var(--mint);color:var(--deep);padding:0 6px;border-radius:6px;height:18px;line-height:18px}
+.admin-main{background:#f1f1f1;padding:24px 28px 32px;min-width:0;min-height:640px}
+
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.page-title{display:flex;align-items:center;gap:8px;font-size:20px;line-height:28px;font-weight:700;margin:0;color:#303030;letter-spacing:-.01em}
+.page-sub{font-size:13px;color:#616161;font-weight:450;margin:-12px 0 16px}
+.btns{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:8px;background:#fff;color:#303030;font-weight:600;font-size:12px;white-space:nowrap;box-shadow:inset 0 -1px 0 0 #b5b5b5,inset 0 0 0 1px rgba(0,0,0,.1),inset 0 .5px 0 1.5px #fff}
+.btn.primary{background:#303030;color:#fff;box-shadow:inset 0 -1px 0 1px rgba(0,0,0,.8),inset 0 0 0 1px #303030,inset 0 .5px 0 1.5px rgba(255,255,255,.25)}
+.btn.magic{background:var(--magic);color:#fff;box-shadow:inset 0 -1px 0 1px rgba(0,0,0,.4),inset 0 .5px 0 1.5px rgba(255,255,255,.25)}
+.link{color:var(--link);font-weight:550}
+
+.cols{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:16px;align-items:start}
+.stack>*+*{margin-top:16px}
+.card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 0 0 rgba(26,26,26,.07),inset 0 1px 0 0 rgba(204,204,204,.5),inset 0 -1px 0 0 rgba(0,0,0,.17),inset -1px 0 0 0 rgba(0,0,0,.13),inset 1px 0 0 0 rgba(0,0,0,.13)}
+.card.flush{padding:0;overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.card.flush .card-head{padding:12px 16px 0}
+.card h5{font-size:13px;font-weight:650;margin:0;color:#303030}
+.sub{color:#616161;font-size:12.5px}
+.bigline{font-size:24px;line-height:32px;font-weight:650;letter-spacing:-.01em;color:#000;margin:2px 0 12px}
+.kv{margin:0;display:grid;gap:8px}
+.kv div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px}
+.kv dt{color:#616161}
+.kv dd{margin:0}
+
+.badge{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px;border-radius:8px;font-size:12px;font-weight:550;background:#e3e3e3;color:#4a4a4a;white-space:nowrap}
+.badge svg{width:12px;height:12px}
+.badge.success{background:var(--mint);color:var(--deep)}
+.badge.info{background:#e0f0ff;color:#00527c}
+.badge.attention{background:#ffef9d;color:#4f4700}
+.badge.critical{background:#fedad9;color:#8e1f0b}
+.badge.magic{background:var(--magic-bg);color:var(--magic)}
+
+.tablewrap{overflow-x:auto}
+.itable{width:100%;border-collapse:collapse;min-width:520px}
+.itable th{text-align:left;font-weight:550;color:#616161;font-size:12px;background:#f7f7f7;padding:6px 12px;border-bottom:1px solid #e3e3e3;white-space:nowrap}
+.itable td{padding:10px 12px;border-bottom:1px solid #ebebeb;vertical-align:middle}
+.itable tr:last-child td{border-bottom:0}
+.itable tr.sel td{background:#f3f3f3}
+.itable td:first-child,.itable th:first-child{padding-left:16px}
+.itable b{font-weight:600;color:#303030}
+.itable .badges{display:flex;gap:4px;flex-wrap:wrap}
+.filters{display:flex;gap:4px;padding:8px 8px 8px 8px;border-bottom:1px solid #e3e3e3}
+.filters span{padding:4px 10px;border-radius:8px;font-weight:550;color:#616161}
+.filters span.on{background:#e3e3e3;color:#303030}
+
+.banner{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;padding:12px 14px;border-radius:12px;background:#eaf4ff;color:#303030;box-shadow:inset 0 0 0 1px rgba(0,82,124,.12)}
+.banner.success{background:#e9fbf0;box-shadow:inset 0 0 0 1px rgba(12,81,50,.14)}
+.banner svg{width:20px;height:20px;margin-top:0}
+.banner b{font-weight:650}
+
+.bill{list-style:none;margin:0 0 10px;padding:0}
+.bill li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid #f1f1f1}
+.bill li.total{border-bottom:0;font-weight:650;padding-top:10px}
+
+.ai-card{border-radius:12px;padding:16px;background:#fff;box-shadow:inset 0 0 0 1px #e4d6ff,0 1px 0 rgba(26,26,26,.07)}
+.ai-head{display:flex;align-items:center;gap:6px;color:var(--magic);font-weight:650;margin-bottom:10px}
+.ai-head svg{width:16px;height:16px}
+.ai-box{background:var(--magic-bg);border-radius:10px;padding:10px 12px;margin-top:8px}
+.steps{margin:8px 0 12px;padding-left:18px}
+.steps li{margin:2px 0}
+.quote{border-left:2px solid #e3e3e3;padding-left:10px;margin:6px 0;color:#4a4a4a}
+.quote b{color:#303030;font-weight:600}
+
+.statbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:0}
+.statbar div{padding:12px 16px;border-right:1px solid #ebebeb}
+.statbar div:last-child{border-right:0}
+.statbar strong{display:block;font-size:16px;font-weight:650;color:#000}
+
+.timeline{list-style:none;margin:0;padding:0;position:relative}
+.timeline::before{content:"";position:absolute;left:13px;top:6px;bottom:6px;width:2px;background:#e3e3e3}
+.tl-date{font-size:12px;font-weight:600;color:#616161;padding:10px 0 6px 36px;position:relative}
+.tl-item{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:start;padding:6px 0;position:relative}
+.tl-dot{width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1.5px #d4d4d4;display:grid;place-items:center;position:relative;z-index:1}
+.tl-dot svg{width:14px;height:14px;color:#4a4a4a}
+.tl-dot.ai{background:var(--magic-bg);box-shadow:inset 0 0 0 1.5px #d9c5ff}
+.tl-dot.ai svg{color:var(--magic)}
+.tl-time{color:#8a8a8a;font-size:12px;white-space:nowrap}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+
+.toggle-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 0}
+.toggle{width:32px;height:18px;border-radius:9px;background:#303030;position:relative;flex:none}
+.toggle::after{content:"";position:absolute;right:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff}
+.meter{height:8px;border-radius:4px;background:#ebebeb;overflow:hidden;margin:8px 0 6px}
+.meter span{display:block;height:100%;width:34%;background:#303030;border-radius:4px}
+
+.token{display:inline-block;background:#e3e3e3;border-radius:6px;padding:0 6px;font-weight:550;font-size:12px}
+.msg-btns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.msg-btns span{border-radius:999px;padding:3px 10px;font-weight:550;font-size:12px;box-shadow:inset 0 0 0 1px #c9c9c9;background:#fff}
+
+/* Small phone preview inside admin */
+.mini-phone{width:248px;margin:0 auto;border-radius:38px;background:#1c1c1e;padding:8px;box-shadow:0 0 0 1px #3a3a3c,0 16px 30px -12px rgba(0,0,0,.35)}
+.mini-screen{border-radius:31px;background:#fff;overflow:hidden;height:500px;display:flex;flex-direction:column}
+.mini-top{padding:30px 14px 10px;text-align:center;border-bottom:1px solid #ededed;background:#fafafa}
+.mini-av{width:36px;height:36px;border-radius:50%;background:#ffd6a4;color:#5e4200;display:grid;place-items:center;font-weight:700;font-size:12px;margin:0 auto 4px}
+.mini-name{font-weight:650;font-size:13px;display:flex;align-items:center;justify-content:center;gap:4px}
+.mini-name svg{width:13px;height:13px;color:var(--link)}
+.mini-verified{font-size:11px;color:#616161}
+.mini-body{padding:12px;display:flex;flex-direction:column;gap:8px;font-size:12.5px;line-height:1.4}
+.rich{border-radius:18px;overflow:hidden;box-shadow:inset 0 0 0 1px #e6e6e6;max-width:200px}
+.rich-img{height:104px;background:#b8c9b0;position:relative}
+.rich-img::before{content:"";position:absolute;left:22px;right:22px;top:26px;bottom:20px;border-radius:10px;background:#9db394;box-shadow:0 10px 0 -4px #8aa480,0 20px 0 -8px #7c9772}
+.rich-body{padding:10px 12px;background:#f3f3f3}
+.rich-body b{display:block;font-size:13px}
+.chips{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.chips span{border-radius:999px;padding:6px 12px;font-weight:600;font-size:12px;color:var(--link);box-shadow:inset 0 0 0 1px #c7d9f5;background:#fff}
+
+/* ---------- Roadmap ---------- */
+.phases{list-style:none;padding:0;margin:72px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid #000}
+.phase{padding:32px 28px 0 0;position:relative}
+.phase::before{content:"";position:absolute;top:-8px;left:0;width:14px;height:14px;border-radius:50%;background:#000;box-shadow:0 0 0 4px var(--canvas)}
+.phase.full::before{background:var(--magic)}
+.phase-when{font-size:15px;color:var(--ink-2);font-weight:500}
+.phase h3{font-family:var(--display);font-size:26px;font-weight:600;letter-spacing:-.025em;line-height:1.1;margin:6px 0 12px;color:#000}
+.phase p{font-size:16px;line-height:1.55;margin:0;color:var(--ink)}
+.tablewrap-lg{overflow-x:auto;margin-top:88px}
+.compare{width:100%;border-collapse:collapse;font-size:16px;min-width:640px}
+.compare th,.compare td{text-align:left;vertical-align:top;padding:16px 24px 16px 0;border-bottom:1px solid var(--line)}
+.compare thead th{font-family:var(--display);font-size:22px;font-weight:600;letter-spacing:-.02em;color:#000;border-bottom:2px solid #000;padding-bottom:14px}
+.compare thead th small{display:block;font-family:var(--text);font-size:14px;font-weight:500;color:var(--ink-2);letter-spacing:0;margin-top:4px}
+.compare tbody th{font-weight:600;color:#000;width:20%}
+.compare td{width:40%}
+
+/* ---------- Calculator ---------- */
+.calc{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:64px;margin-top:64px;align-items:start}
+.calc-inputs{display:grid;gap:30px}
+.field label{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-weight:600;font-size:17px;color:#000;margin-bottom:12px}
+.field output{font-variant-numeric:tabular-nums;font-weight:650}
+.field .hint{font-size:15px;color:var(--ink-2);margin:8px 0 0}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;margin:0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(to right,#000 var(--p,50%),#d4d4d4 var(--p,50%))}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:#d4d4d4}
+input[type=range]::-moz-range-progress{height:6px;border-radius:3px;background:#000}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;margin-top:-9px;box-shadow:0 0 0 2px #000,0 2px 6px rgba(0,0,0,.2)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #000}
+input[type=range]:focus-visible{outline:none}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 2px #000,0 0 0 6px rgba(149,191,71,.6)}
+input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 4px rgba(149,191,71,.6)}
+.calc-out{background:#000;color:#fff;border-radius:24px;padding:40px;position:sticky;top:96px}
+.out-label{color:rgba(255,255,255,.68);font-size:16px;margin:0 0 10px}
+.out-main{font-family:var(--display);font-size:clamp(52px,6vw,80px);font-weight:600;letter-spacing:-.045em;line-height:1;font-variant-numeric:tabular-nums}
+.out-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:36px;padding-top:28px;border-top:1px solid rgba(255,255,255,.2)}
+.out-grid strong{display:block;font-family:var(--display);font-size:30px;font-weight:600;letter-spacing:-.025em;line-height:1.1;font-variant-numeric:tabular-nums}
+.out-grid span{display:block;font-size:15px;line-height:1.4;margin-top:6px;color:rgba(255,255,255,.68)}
+.out-note{font-size:15px;line-height:1.5;color:rgba(255,255,255,.72);margin:32px 0 0}
+
+/* ---------- Why me ---------- */
+.fit td:first-of-type{width:34%}
+.roles{margin-top:96px}
+.role{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:64px;padding:48px 0;border-top:1px solid var(--line)}
+.role:first-child{border-top:2px solid #000}
+.role-org{font-family:var(--display);font-size:36px;font-weight:600;letter-spacing:-.035em;line-height:1.02;color:#000;margin:0}
+.role-meta{color:var(--ink-2);font-size:16px;margin:10px 0 0;max-width:20em}
+.role-body>p{margin:0 0 20px;max-width:38em}
+.role-body ul{margin:0;padding-left:20px;max-width:40em}
+.role-body li{margin:0 0 10px}
+.role-body li::marker{color:var(--ink-3)}
+.engagement{background:#fff;border-radius:16px;padding:28px;margin-top:28px;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.engagement h4{font-family:var(--display);font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0 0 4px;color:#000}
+.engagement .eng-meta{color:var(--ink-2);font-size:15px;margin:0 0 16px}
+.figures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin:0 0 28px;padding:0;list-style:none}
+.figures strong{display:block;font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:-.035em;line-height:1.05;color:#000}
+.figures span{display:block;font-size:15px;line-height:1.4;margin-top:4px;color:var(--ink-2)}
+.role-body .figures{padding:0;margin:0 0 28px;list-style:none;max-width:none}
+.role-body .figures li{margin:0}
+
+/* ---------- 90 days ---------- */
+.days{list-style:none;padding:0;margin:64px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px}
+.days li{border-top:2px solid #000;padding-top:24px}
+.days .when{font-size:15px;font-weight:500;color:var(--ink-2)}
+.days h3{font-family:var(--display);font-size:26px;font-weight:600;letter-spacing:-.025em;margin:6px 0 12px;color:#000}
+.days p{margin:0;font-size:17px}
+
+/* ---------- Contact ---------- */
+.contact{background:#000;color:#fff;padding:128px 0}
+.contact h2{font-family:var(--display);font-weight:600;font-size:clamp(44px,6vw,84px);line-height:.98;letter-spacing:-.045em;margin:0 0 28px;max-width:12em}
+.contact p{font-size:20px;color:rgba(255,255,255,.78);max-width:34em;margin:0 0 40px}
+.contact .hero-ctas{margin-bottom:0}
+
+.sources{padding:64px 0 48px;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.sources h2{font-size:15px;font-weight:600;color:var(--ink);margin:0 0 16px}
+.sources ol{margin:0;padding-left:22px;columns:2;column-gap:48px}
+.sources li{margin:0 0 8px;break-inside:avoid}
+.sources a{color:var(--ink-2);text-underline-offset:2px}
+.sources a:hover{color:#000}
+.footer{padding:28px 0 40px;font-size:14px;color:var(--ink-2)}
+.footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.footer p{margin:0;max-width:52em}
+
+/* ---------- JS-only tab hiding ---------- */
+.js .panel{display:none}
+.js .panel.on{display:block}
+.panel+.panel{margin-top:16px}
+.js .panel+.panel{margin-top:0}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1080px){
+  .admin-body{grid-template-columns:minmax(0,1fr)}
+  .admin-nav{display:none}
+  .cols{grid-template-columns:minmax(0,1fr)}
+  .admin-main{min-height:0}
+}
+@media (max-width:960px){
+  .hero .wrap{grid-template-columns:1fr;gap:64px}
+  .split,.reason-group,.role,.calc{grid-template-columns:1fr;gap:28px}
+  .calc{gap:48px}
+  .calc-out{position:static}
+  .phases{grid-template-columns:1fr 1fr;row-gap:40px;border-top:0}
+  .phase{border-top:2px solid #000}
+  .days{grid-template-columns:1fr;gap:40px}
+  .nav-links{display:none}
+  .nav .pill{margin-left:auto}
+}
+@media (max-width:720px){
+  body{font-size:17px}
+  .wrap{padding:0 20px}
+  .sec{padding:80px 0}
+  .hero{padding:56px 0 72px}
+  .hero-lede,.lede,.contact p{font-size:18px}
+  .ledger,.ledger thead,.ledger tbody,.ledger tr,.ledger th,.ledger td{display:block;width:auto!important}
+  .ledger thead{display:none}
+  .ledger tr{padding:22px 0;border-bottom:1px solid var(--line)}
+  .ledger tbody tr:first-child{border-top:2px solid #000}
+  .ledger th,.ledger td{border:0;padding:0}
+  .ledger tbody th{margin-bottom:8px}
+  .ledger td+td{margin-top:10px}
+  .ledger td[data-label]::before{content:attr(data-label);display:block;font-size:14px;font-weight:600;color:var(--ink-2);margin-bottom:2px}
+  .phases{grid-template-columns:1fr}
+  .ba,.ba thead,.ba tbody,.ba tr,.ba th,.ba td{display:block;width:auto!important}
+  .ba thead{display:none}
+  .ba{margin-top:48px}
+  .ba tbody tr{padding:24px 0;border-bottom:1px solid var(--line)}
+  .ba tbody tr:first-child{border-top:2px solid #000}
+  .ba tbody tr:last-child{border-bottom:0}
+  .ba th,.ba td{border:0!important;padding:0}
+  .ba tbody th{margin-bottom:12px}
+  .ba td[data-label]::before{content:attr(data-label);display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+  .ba td.ba-today{margin-bottom:12px}
+  .ba td.ba-today::before{color:var(--ink-2)}
+  .ba td.ba-after{padding:14px 16px;border-radius:12px!important}
+  .ba td.ba-after::before{color:var(--deep)}
+  .caption.on{grid-template-columns:minmax(0,1fr);gap:12px}
+  .caption .phase-chip{justify-self:start;order:-1}
+  .admin-main{padding:16px}
+  .kv div{grid-template-columns:76px minmax(0,1fr)}
+  .admin-search{display:none}
+  .admin-user{margin-left:auto}
+  .statbar{grid-template-columns:1fr 1fr}
+  .statbar div:nth-child(2){border-right:0}
+  .statbar div:nth-child(-n+2){border-bottom:1px solid #ebebeb}
+  .figures{gap:12px}
+  .figures strong{font-size:26px}
+  .figures span{font-size:13px}
+  .calc-out{padding:28px}
+  .sources ol{columns:1}
+  .contact{padding:88px 0}
+  .engagement{padding:20px}
+}
+@media (max-width:420px){
+  .phone{width:300px}
+  .ls-time{font-size:72px}
+  .wordmark span{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .notif{opacity:1;animation:none}
+  .pill{transition:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 9 10 3.5 16.5 9v7.5H12V12H8v4.5H3.5z"/></symbol>
+    <symbol id="i-orders" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 11.5h4l1 2h3l1-2h4M3.5 11.5 5.5 4h9l2 7.5v5h-13z"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 3.5h6l7 7-6 6-7-7z"/><circle cx="7" cy="7" r="1.1"/></symbol>
+    <symbol id="i-person" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="7" r="3"/><path d="M4 16.5c.8-3 3.2-4.5 6-4.5s5.2 1.5 6 4.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-target" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="6.5"/><circle cx="10" cy="10" r="2.8"/></symbol>
+    <symbol id="i-bars" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 16.5V11M8 16.5V6M12 16.5V9M16 16.5V3.5"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6.6 3.5H4.5a1 1 0 0 0-1 1.05C3.9 11.2 8.8 16.1 15.45 16.5a1 1 0 0 0 1.05-1v-2.1l-3.3-1.3-1.6 1.6a8.3 8.3 0 0 1-4.3-4.3l1.6-1.6z"/></symbol>
+    <symbol id="i-phone-fill" viewBox="0 0 20 20" fill="currentColor"><path d="M6.6 3H4.4A1.4 1.4 0 0 0 3 4.5C3.4 11.5 8.5 16.6 15.5 17a1.4 1.4 0 0 0 1.5-1.4v-2.3l-3.6-1.5-1.8 1.8a8.8 8.8 0 0 1-4.2-4.2l1.8-1.8z"/></symbol>
+    <symbol id="i-store" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3.5 7.5 5 3.5h10l1.5 4zM4.5 7.5v9h11v-9M8 16.5v-4h4v4"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.5v2.2M10 15.3v2.2M2.5 10h2.2M15.3 10h2.2M4.7 4.7l1.6 1.6M13.7 13.7l1.6 1.6M4.7 15.3l1.6-1.6M13.7 6.3l1.6-1.6"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z"/><path d="M15.5 13l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 4.5h12v8.5H9l-3.5 3v-3H4z"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4.5 7h11l-1 9.5h-9zM7.5 7V6a2.5 2.5 0 0 1 5 0v1"/></symbol>
+    <symbol id="i-info" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 9v4.5M10 6.6v.1"/></symbol>
+    <symbol id="i-check" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="m7 10.2 2 2 4-4.2"/></symbol>
+    <symbol id="i-verified" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.8l2.2 1.6 2.7-.1.8 2.6 2.2 1.6-.9 2.5.9 2.5-2.2 1.6-.8 2.6-2.7-.1L10 18.2l-2.2-1.6-2.7.1-.8-2.6-2.2-1.6.9-2.5-.9-2.5 2.2-1.6.8-2.6 2.7.1z"/><path d="m6.8 10.2 2.2 2.2 4.2-4.4" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="5"/><path d="m13 13 3.5 3.5"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="wordmark" href="#top">Brad Coates <span>for Shopify</span></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#idea">The idea</a>
+      <a href="#product">Product</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#numbers">Numbers</a>
+      <a href="#me">Why me</a>
+    </nav>
+    <a class="pill pill-dark pill-sm" href="#contact">Let’s talk</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap">
+    <div>
+      <p class="hero-kicker">A proposal for Shopify from Brad Coates, November 2026</p>
+      <h1 id="hero-title">Shopify became the merchant’s bank. Next, it should be their carrier.</h1>
+      <p class="hero-lede">Every store runs on a phone line it gets from somewhere else. I’m proposing Shopify Wireless: a business number for every store, work lines for merchants’ employees, and connectivity for POS devices, all built into the admin. Launch it as a light MVNO in the US, prove the demand, then run our own network and put Sidekick inside every call. I’ve spent nearly 15 years building and launching MVNOs, and I’d like to build this one.</p>
+      <div class="hero-ctas">
+        <a class="pill pill-light" href="#product">See it in the admin</a>
+        <a class="pill pill-ghost" href="#me">Why I’m the hire</a>
+      </div>
+    </div>
+
+    <div class="phone" role="img" aria-label="A store owner’s phone lock screen showing three notifications: an incoming call from a known customer, Sidekick resolving the call, and a new wholesale lead.">
+      <div class="phone-screen" aria-hidden="true">
+        <div class="island"></div>
+        <div class="ls-date">Monday, November 16</div>
+        <div class="ls-time">2:41</div>
+        <div class="notifs">
+          <div class="notif n-lead">
+            <div class="notif-icon"><svg width="18" height="18"><use href="#i-phone-fill"/></svg></div>
+            <div>
+              <div class="notif-head"><span>Shopify Wireless</span><span>now</span></div>
+              <div class="notif-title">New wholesale lead</div>
+              Riverbend Café wants 40 napkin sets a month. A draft quote is ready for Ana.
+            </div>
+          </div>
+          <div class="notif ai n-ai">
+            <div class="notif-icon"><svg width="18" height="18"><use href="#i-spark"/></svg></div>
+            <div>
+              <div class="notif-head"><span>Sidekick</span><span>1m ago</span></div>
+              <div class="notif-title">Call resolved in 1m 40s</div>
+              Shared tracking for order #1043 and added Dana to the Sage Linen Throw restock list.
+            </div>
+          </div>
+          <div class="notif n-call">
+            <div class="notif-icon"><svg width="18" height="18"><use href="#i-phone-fill"/></svg></div>
+            <div>
+              <div class="notif-head"><span>Shopify Wireless</span><span>2m ago</span></div>
+              <div class="notif-title">Incoming call: Dana Ruiz</div>
+              Customer since 2024. 3 orders, $482 spent. Order #1043 is out for delivery.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY NOW ================= -->
+<section class="sec" id="idea" aria-labelledby="idea-title">
+  <div class="wrap">
+    <div class="split">
+      <h2 id="idea-title">Shopify already ships everything around the phone line.</h2>
+      <div class="prose">
+        <p>Shopify Payments turned a software company into a merchant-services company. In Q3 2026, merchant solutions made up 78% of Shopify’s $3.7 billion in revenue.<sup><a href="#s1">1</a></sup> Connectivity is the same kind of business, and brands outside telecom are already in it: Klarna,<sup><a href="#s2">2</a></sup> Comcast,<sup><a href="#s3">3</a></sup> and Wealthsimple, where I helped launch a phone plan with TELUS.<sup><a href="#s4">4</a></sup></p>
+        <p>Shopify already sells a POS handheld with an eSIM inside,<sup><a href="#s5">5</a></sup> sends texts through Shopify Messaging<sup><a href="#s6">6</a></sup> and has an AI assistant that can hold a voice conversation.<sup><a href="#s7">7</a></sup> What’s missing is the phone line underneath them.</p>
+      </div>
+    </div>
+
+    <table class="ba">
+      <caption class="visually-hidden">How a merchant works today, and how they would work with Shopify Wireless</caption>
+      <thead>
+        <tr><td></td><th scope="col" class="ba-today">Today</th><th scope="col" class="ba-after">With Shopify Wireless</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Calls and leads</th>
+          <td class="ba-today" data-label="Today">Merchants answer when they can and log leads in Shopify by hand. Missed calls are missed sales.</td>
+          <td class="ba-after" data-label="With Shopify Wireless">An AI assistant answers every call, texts back, and hands warm leads to the team inside Shopify.</td>
+        </tr>
+        <tr>
+          <th scope="row">The merchant’s employees</th>
+          <td class="ba-today" data-label="Today">Employees give customers their personal cell numbers, and those customers leave when they do.</td>
+          <td class="ba-after" data-label="With Shopify Wireless">Each employee gets a work line on their own phone. The store owns the number and keeps it.</td>
+        </tr>
+        <tr>
+          <th scope="row">Business number</th>
+          <td class="ba-today" data-label="Today">The store’s number lives with a separate phone company, on a separate bill.</td>
+          <td class="ba-after" data-label="With Shopify Wireless">A business number comes with every Shopify plan and is managed in the admin.</td>
+        </tr>
+        <tr>
+          <th scope="row">Checkout</th>
+          <td class="ba-today" data-label="Today">POS devices depend on the store’s Wi-Fi.</td>
+          <td class="ba-after" data-label="With Shopify Wireless">Devices switch to LTE when the Wi-Fi drops and keep selling.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= THE CASE ================= -->
+<section class="sec sec-canvas" id="case" aria-labelledby="case-title">
+  <div class="wrap">
+    <h2 id="case-title">The case for Shopify Wireless.</h2>
+    <p class="lede">Some of this is revenue Shopify can add in the first year on a partner’s network. The rest only becomes possible once Shopify runs its own core. Each reason is marked with the phase that unlocks it.</p>
+
+    <div class="reason-group">
+      <div>
+        <h3>Revenue Shopify can add in year one</h3>
+        <p class="group-note">Connectivity sold the way Shopify already sells Payments: built in, billed with the plan.</p>
+      </div>
+      <div class="reasons">
+        <div class="reason">
+          <h4>Put a Shopify SIM in the hardware <span class="phase-chip">Light MVNO</span></h4>
+          <p>The Victa Mobile has an eSIM and a SIM tray, and Shopify’s offline GMV grew 30% last quarter.<sup><a href="#s8">8</a></sup> Ship every device with Shopify connectivity switched on: Wi-Fi first, LTE the moment it drops. Merchants stop losing sales to bad Wi-Fi, pop-ups and market stalls work anywhere, and Shopify earns a monthly fee on every device.</p>
+        </div>
+        <div class="reason">
+          <h4>Work lines for every merchant’s team <span class="phase-chip">Light MVNO</span></h4>
+          <p>A store owner adds a work number for each of their employees from the Shopify admin. It installs as an eSIM on the employee’s own phone, next to their personal number, and it’s tied to their POS staff account. The owner can switch lines off after hours and see every customer call. When an employee leaves, the number stays with the store, and so do the customers who have it.</p>
+        </div>
+        <div class="reason">
+          <h4>Include a free line, then sell the upgrades <span class="phase-chip">Light MVNO</span></h4>
+          <p>Every Shopify plan comes with a business phone number. The free line gets it adopted; employee work lines, device SIMs and Sidekick for calls are the paid add-ons. Comcast’s free-line offer shows how well this converts: about 70% of its free mobile lines turn into paid ones.<sup><a href="#s9">9</a></sup></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="reason-group">
+      <div>
+        <h3>Products only a carrier can build</h3>
+        <p class="group-note">When Shopify carries the call, the call becomes part of the commerce platform.</p>
+      </div>
+      <div class="reasons">
+        <div class="reason">
+          <h4>Turn calls into customer data <span class="phase-chip">Light, then full</span></h4>
+          <p>Every call lands on the customer timeline next to orders and texts. Unknown callers become leads, spam never rings, and a wholesale inquiry turns into a B2B company and a draft order. Merchants finally see which campaigns made the phone ring. At launch, every line gets call logs and the business line gets AI summaries; with our own core, AI covers every employee’s line too.</p>
+        </div>
+        <div class="reason">
+          <h4>Put Sidekick inside the call <span class="phase-chip full">Full MVNO</span></h4>
+          <p>On our own core network, every call can pass through Sidekick. It answers “where’s my order?” from live order data, transcribes and summarizes each conversation, and hands harder calls to a person with the context already on screen. Sales teams get call notes they didn’t have to write.</p>
+        </div>
+        <div class="reason">
+          <h4>Reach customers from the store’s own number <span class="phase-chip full">Full MVNO</span></h4>
+          <p>Owning the numbers and the network lets Shopify verify the store’s calls, show its name on caller ID, and send RCS messages as a verified business. Sidekick drafts the follow-up, and it goes out from the number customers already know, only to people who opted in.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="reason-group">
+      <div>
+        <h3>Why it compounds</h3>
+        <p class="group-note">Wireless feeds the parts of Shopify that already work.</p>
+      </div>
+      <div class="reasons">
+        <div class="reason">
+          <h4>Every call can end in a checkout</h4>
+          <p>Sidekick or an employee takes the order on the phone and texts a Shop Pay link before the caller hangs up. Calls stop being a cost and become GMV that runs through Shopify Payments.</p>
+        </div>
+        <div class="reason">
+          <h4>The phone number is the stickiest thing a merchant owns</h4>
+          <p>It’s on the Google listing, the receipts and the side of the delivery van. Once a store ports its number to Shopify, the phone line is one more reason to stay.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRODUCT ================= -->
+<section class="sec" id="product" aria-labelledby="product-title">
+  <div class="wrap">
+    <h2 id="product-title">What it looks like in the admin.</h2>
+    <p class="lede">A concept for a fictional store, Juniper &amp; Pine, with two locations in Austin. It sits where merchants already work, with no new app to learn.</p>
+
+    <div class="tabs" role="tablist" aria-label="Admin views">
+      <button class="tab" role="tab" id="tab-lines" aria-controls="panel-lines" aria-selected="true">Lines</button>
+      <button class="tab" role="tab" id="tab-calls" aria-controls="panel-calls" aria-selected="false" tabindex="-1">Calls</button>
+      <button class="tab" role="tab" id="tab-customer" aria-controls="panel-customer" aria-selected="false" tabindex="-1">Customer timeline</button>
+      <button class="tab" role="tab" id="tab-devices" aria-controls="panel-devices" aria-selected="false" tabindex="-1">Devices</button>
+      <button class="tab" role="tab" id="tab-outreach" aria-controls="panel-outreach" aria-selected="false" tabindex="-1">Outreach</button>
+    </div>
+
+    <div class="caption on" data-for="lines">
+      <p><b>One business number in every plan, plus work lines for the merchant’s employees.</b> Each employee gets an eSIM on their own phone. When someone leaves, the number goes back to the store, so customers never call a dead line.</p>
+      <span class="phase-chip">Light MVNO, at launch</span>
+    </div>
+    <div class="caption" data-for="calls">
+      <p><b>Every call, sorted.</b> Order questions resolved automatically, spam blocked, and new callers turned into leads with a summary and next steps. This is the sales pipeline Shopify doesn’t have yet.</p>
+      <span class="phase-chip">Light MVNO, AI on every line with full</span>
+    </div>
+    <div class="caption" data-for="customer">
+      <p><b>Calls on the customer timeline.</b> The call, the summary and the text that followed sit next to online and in-store orders, so any employee can pick up where the last person left off.</p>
+      <span class="phase-chip">Light MVNO, at launch</span>
+    </div>
+    <div class="caption" data-for="devices">
+      <p><b>Checkout that survives bad Wi-Fi.</b> POS hardware ships with a Shopify SIM. When the store Wi-Fi drops, devices move to LTE and the merchant sees exactly what it saved them.</p>
+      <span class="phase-chip">Light MVNO, at launch</span>
+    </div>
+    <div class="caption" data-for="outreach">
+      <p><b>Outreach from the store’s own number.</b> Sidekick turns what callers asked for into a follow-up, sent by RCS from a verified business number, with text-message fallback and consent checks built in.</p>
+      <span class="phase-chip full">Full MVNO</span>
+    </div>
+
+    <div class="admin" aria-label="Concept mockup of the Shopify admin">
+      <div class="admin-top">
+        <div class="admin-mark">Admin <span>concept</span></div>
+        <div class="admin-search"><svg width="16" height="16"><use href="#i-search"/></svg>Search<kbd>⌘ K</kbd></div>
+        <div class="admin-user"><span class="avatar">JP</span>Juniper &amp; Pine</div>
+      </div>
+      <div class="admin-body">
+        <nav class="admin-nav" aria-hidden="true">
+          <div class="nav-item" data-key="home"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item" data-key="orders"><svg><use href="#i-orders"/></svg>Orders</div>
+          <div class="nav-item" data-key="products"><svg><use href="#i-tag"/></svg>Products</div>
+          <div class="nav-item" data-key="customers"><svg><use href="#i-person"/></svg>Customers</div>
+          <div class="nav-item" data-key="marketing"><svg><use href="#i-target"/></svg>Marketing</div>
+          <div class="nav-item" data-key="analytics"><svg><use href="#i-bars"/></svg>Analytics</div>
+          <div class="nav-item" data-key="phone"><svg><use href="#i-phone"/></svg>Phone<span class="nav-new">New</span></div>
+          <div class="nav-sub" data-key="calls">Calls</div>
+          <div class="nav-sub" data-key="lines">Lines</div>
+          <div class="nav-label">Sales channels</div>
+          <div class="nav-item" data-key="store"><svg><use href="#i-bag"/></svg>Online Store</div>
+          <div class="nav-item" data-key="pos"><svg><use href="#i-store"/></svg>Point of Sale</div>
+          <div class="nav-sub" data-key="devices">Devices</div>
+          <div class="nav-label">&nbsp;</div>
+          <div class="nav-item" data-key="settings"><svg><use href="#i-gear"/></svg>Settings</div>
+        </nav>
+
+        <div class="admin-main">
+
+          <!-- LINES -->
+          <section class="panel on" id="panel-lines" role="tabpanel" aria-labelledby="tab-lines" data-nav="phone lines" tabindex="0">
+            <div class="page-head">
+              <h3 class="page-title">Lines</h3>
+              <div class="btns"><span class="btn">Port a number</span><span class="btn primary">Add line</span></div>
+            </div>
+            <div class="cols">
+              <div class="stack">
+                <div class="card">
+                  <div class="card-head"><h5>Business line</h5><span class="badge success">Included in your plan</span></div>
+                  <div class="bigline">(512) 555-0100</div>
+                  <dl class="kv">
+                    <div><dt>Rings</dt><dd>Employees on shift first, then Sidekick after 4 rings</dd></div>
+                    <div><dt>Hours</dt><dd>Mon–Sat, 10 AM–7 PM. Sidekick answers after hours.</dd></div>
+                    <div><dt>Shown on</dt><dd>Online store footer, Google Business Profile, receipts</dd></div>
+                  </dl>
+                </div>
+                <div class="card flush">
+                  <div class="card-head"><h5>Employee lines</h5><span class="link">Manage roles</span></div>
+                  <div class="tablewrap">
+                    <table class="itable">
+                      <thead><tr><th>Employee</th><th>Number</th><th>Installed on</th><th>Status</th></tr></thead>
+                      <tbody>
+                        <tr><td><b>Maya Chen</b><div class="sub">Store manager</div></td><td>(512) 555-0121</td><td>eSIM, iPhone</td><td><span class="badge success">Active</span></td></tr>
+                        <tr><td><b>Theo Park</b><div class="sub">Sales associate</div></td><td>(512) 555-0122</td><td>eSIM, Pixel</td><td><span class="badge attention">Off after hours</span></td></tr>
+                        <tr><td><b>Ana Ortiz</b><div class="sub">Wholesale rep</div></td><td>(512) 555-0123</td><td>eSIM, iPhone</td><td><span class="badge success">Active</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="banner">
+                  <svg style="color:#00527c"><use href="#i-info"/></svg>
+                  <div><b>Jordan Lee no longer works here.</b> Their number, (512) 555-0124, is held for the store and forwards to Maya until you reassign it. <span class="link">Reassign number</span></div>
+                </div>
+              </div>
+              <div class="stack">
+                <div class="card">
+                  <div class="card-head"><h5>This month</h5></div>
+                  <ul class="bill">
+                    <li><span>Business line</span><span>Included</span></li>
+                    <li><span>3 employee lines</span><span>$60.00</span></li>
+                    <li><span>3 device SIMs</span><span>$24.00</span></li>
+                    <li><span>Sidekick for calls</span><span>$29.00</span></li>
+                    <li class="total"><span>Total</span><span>$113.00 USD</span></li>
+                  </ul>
+                  <div class="sub">Billed with your Shopify plan.</div>
+                </div>
+                <div class="card">
+                  <div class="card-head"><h5>Bring your numbers</h5></div>
+                  <div>Move an existing store number to Shopify without changing it on your listings or receipts.</div>
+                  <div style="margin-top:10px"><span class="link">Start a port</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- CALLS -->
+          <section class="panel" id="panel-calls" role="tabpanel" aria-labelledby="tab-calls" data-nav="phone calls" tabindex="0">
+            <div class="page-head">
+              <h3 class="page-title">Calls</h3>
+              <div class="btns"><span class="btn">Export</span><span class="btn primary">Call settings</span></div>
+            </div>
+            <div class="cols">
+              <div class="card flush">
+                <div class="filters"><span class="on">All</span><span>Leads</span><span>Orders</span><span>Missed</span><span>Spam</span></div>
+                <div class="tablewrap">
+                  <table class="itable">
+                    <thead><tr><th>Caller</th><th>Today</th><th>Outcome</th></tr></thead>
+                    <tbody>
+                      <tr><td><b>Dana Ruiz</b><div class="sub">Customer, 3 orders</div></td><td>2:41 PM<div class="sub">1m 40s</div></td><td><div class="badges"><span class="badge magic"><svg><use href="#i-spark"/></svg>Sidekick</span><span class="badge success">Order status shared</span></div></td></tr>
+                      <tr class="sel"><td><b>(512) 555-0187</b><div class="sub">New caller, Riverbend Café</div></td><td>1:58 PM<div class="sub">6m 40s</div></td><td><div class="badges"><span class="badge info">Wholesale lead</span><span class="badge">Ana Ortiz</span></div></td></tr>
+                      <tr><td><b>Marcus Bell</b><div class="sub">Customer, 1 order</div></td><td>12:15 PM<div class="sub">2m 05s</div></td><td><div class="badges"><span class="badge">Return started</span></div></td></tr>
+                      <tr><td><b>(512) 555-0166</b><div class="sub">New caller</div></td><td>10:47 AM<div class="sub">Voicemail, 0:38</div></td><td><div class="badges"><span class="badge attention">Call back: Theo</span></div></td></tr>
+                      <tr><td><b>(737) 555-0110</b><div class="sub">Flagged as spam</div></td><td>10:02 AM<div class="sub">Didn’t ring</div></td><td><div class="badges"><span class="badge critical">Blocked</span></div></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="ai-card">
+                <div class="ai-head"><svg><use href="#i-spark"/></svg>Call summary</div>
+                <div style="font-weight:650;color:#000">Riverbend Café, new wholesale lead</div>
+                <div style="margin-top:4px">Owner Sam Okafor runs two cafés in East Austin. Wants 40 linen napkin sets a month across both and asked about net-30 terms. Answered by Ana Ortiz.</div>
+                <div class="ai-box">
+                  <div style="font-weight:650">Next steps</div>
+                  <ol class="steps"><li>Add Riverbend Café as a B2B company</li><li>Send a quote by Friday</li></ol>
+                </div>
+                <div style="margin-top:12px" class="sub">From the transcript</div>
+                <div class="quote"><b>Sam:</b> We go through about forty sets a month between the two shops.</div>
+                <div class="quote"><b>Ana:</b> We can do that. Are you set up for net-30?</div>
+                <div class="btns" style="margin-top:14px"><span class="btn primary">Create company</span><span class="btn">Draft quote</span></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- CUSTOMER -->
+          <section class="panel" id="panel-customer" role="tabpanel" aria-labelledby="tab-customer" data-nav="customers" tabindex="0">
+            <div class="page-head">
+              <h3 class="page-title">Dana Ruiz <span class="badge">Caller</span></h3>
+              <div class="btns"><span class="btn">Call</span><span class="btn primary">Create order</span></div>
+            </div>
+            <p class="page-sub">Austin, TX. Customer since March 2024.</p>
+            <div class="card flush" style="margin-bottom:16px">
+              <div class="statbar">
+                <div><span class="sub">Amount spent</span><strong>$482.00</strong></div>
+                <div><span class="sub">Orders</span><strong>3</strong></div>
+                <div><span class="sub">Calls</span><strong>4</strong></div>
+                <div><span class="sub">Prefers</span><strong>Text</strong></div>
+              </div>
+            </div>
+            <div class="cols">
+              <div class="card">
+                <div class="card-head"><h5>Timeline</h5></div>
+                <ul class="timeline">
+                  <li class="tl-date">Today</li>
+                  <li class="tl-item">
+                    <span class="tl-dot ai"><svg><use href="#i-spark"/></svg></span>
+                    <div><b>Called the store.</b> Answered by Sidekick, 1m 40s.
+                      <div class="ai-box">Asked where order #1043 is; shared tracking, out for delivery today. Asked when the Sage Linen Throw is back; added Dana to the restock list.</div>
+                    </div>
+                    <span class="tl-time">2:41 PM</span>
+                  </li>
+                  <li class="tl-item">
+                    <span class="tl-dot"><svg><use href="#i-chat"/></svg></span>
+                    <div>Text sent from (512) 555-0100 with the tracking link for #1043.</div>
+                    <span class="tl-time">2:42 PM</span>
+                  </li>
+                  <li class="tl-date">October 28</li>
+                  <li class="tl-item">
+                    <span class="tl-dot"><svg><use href="#i-orders"/></svg></span>
+                    <div>Order <span class="link">#1043</span> placed on the online store, $168.00.</div>
+                    <span class="tl-time">8:12 PM</span>
+                  </li>
+                  <li class="tl-date">September 12</li>
+                  <li class="tl-item">
+                    <span class="tl-dot"><svg><use href="#i-store"/></svg></span>
+                    <div>Bought in store at South Congress, $96.00. Served by Theo Park.</div>
+                    <span class="tl-time">4:30 PM</span>
+                  </li>
+                  <li class="tl-item">
+                    <span class="tl-dot"><svg><use href="#i-phone"/></svg></span>
+                    <div>Called Theo Park’s line about a gift card, 3m 05s.</div>
+                    <span class="tl-time">11:05 AM</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="stack">
+                <div class="card">
+                  <div class="card-head"><h5>Contact</h5></div>
+                  <div>dana.ruiz@example.com</div>
+                  <div>(512) 555-0143</div>
+                </div>
+                <div class="card">
+                  <div class="card-head"><h5>Marketing</h5></div>
+                  <div class="tags"><span class="badge success">Email subscribed</span><span class="badge success">SMS subscribed</span></div>
+                </div>
+                <div class="card">
+                  <div class="card-head"><h5>Tags</h5></div>
+                  <div class="tags"><span class="badge">Caller</span><span class="badge">Restock: Sage Linen Throw</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- DEVICES -->
+          <section class="panel" id="panel-devices" role="tabpanel" aria-labelledby="tab-devices" data-nav="pos devices" tabindex="0">
+            <div class="page-head">
+              <h3 class="page-title">Devices</h3>
+              <div class="btns"><span class="btn">Order a SIM</span><span class="btn primary">Add device</span></div>
+            </div>
+            <div class="stack">
+              <div class="banner success">
+                <svg style="color:var(--deep)"><use href="#i-check"/></svg>
+                <div><b>Store Wi-Fi at South Congress dropped at 2:14 PM.</b> 23 sales ($1,486.20) went through on LTE and no checkouts were lost. Wi-Fi came back at 2:51 PM.</div>
+              </div>
+              <div class="card flush">
+                <div class="tablewrap">
+                  <table class="itable">
+                    <thead><tr><th>Device</th><th>Location</th><th>Connection</th><th>Data this month</th><th>Status</th></tr></thead>
+                    <tbody>
+                      <tr><td><b>Victa Mobile, Floor 1</b></td><td>South Congress</td><td>Wi-Fi, LTE on standby</td><td>182 MB</td><td><span class="badge success">Online</span></td></tr>
+                      <tr><td><b>Victa Mobile, Floor 2</b></td><td>South Congress</td><td>Wi-Fi, used LTE today</td><td>311 MB</td><td><span class="badge success">Online</span></td></tr>
+                      <tr><td><b>Victa Mobile, Market stall</b></td><td>Saturday market</td><td>LTE only</td><td>1.2 GB</td><td><span class="badge success">Online</span></td></tr>
+                      <tr><td><b>POS Terminal, Counter</b></td><td>East 6th</td><td>Ethernet</td><td>None</td><td><div class="badges"><span class="badge attention">No backup</span><span class="link">Add LTE backup</span></div></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="cols">
+                <div class="card">
+                  <div class="card-head"><h5>Shared data pool</h5><span class="sub">3 device SIMs</span></div>
+                  <div class="meter" role="presentation"><span></span></div>
+                  <div class="sub">1.7 GB of 5 GB used this month</div>
+                </div>
+                <div class="card">
+                  <div class="card-head"><h5>When Wi-Fi drops</h5></div>
+                  <div class="toggle-row"><span>Switch to LTE automatically</span><span class="toggle"></span></div>
+                  <div class="toggle-row"><span>Text the manager on duty</span><span class="toggle"></span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- OUTREACH -->
+          <section class="panel" id="panel-outreach" role="tabpanel" aria-labelledby="tab-outreach" data-nav="marketing" tabindex="0">
+            <div class="page-head">
+              <h3 class="page-title">Restock follow-up <span class="badge info">Draft</span></h3>
+              <div class="btns"><span class="btn">Send test</span><span class="btn primary">Schedule</span></div>
+            </div>
+            <div class="cols">
+              <div class="stack">
+                <div class="card">
+                  <div class="card-head"><h5>Audience</h5></div>
+                  <div style="font-weight:600;color:#000">Customers who called about the Sage Linen Throw in the last 30 days</div>
+                  <div class="sub" style="margin-top:4px">31 customers. 7 more called but haven’t agreed to texts, so they’re left out.</div>
+                </div>
+                <div class="card">
+                  <div class="card-head"><h5>Send from</h5><span class="badge success"><svg><use href="#i-verified"/></svg>Verified business</span></div>
+                  <div style="font-weight:600;color:#000">(512) 555-0100, Juniper &amp; Pine</div>
+                  <div class="sub" style="margin-top:4px">RCS, with a regular text for phones that don’t support it.</div>
+                </div>
+                <div class="ai-card">
+                  <div class="ai-head"><svg><use href="#i-spark"/></svg>Message drafted by Sidekick</div>
+                  <div>Hi <span class="token">First name</span>, the Sage Linen Throw is back at Juniper &amp; Pine. We’re holding one for you until Sunday. Want it shipped to your saved address?</div>
+                  <div class="msg-btns"><span>Ship it to me</span><span>I’ll pick it up</span></div>
+                  <div class="sub" style="margin-top:12px">“Ship it to me” replies get a Shop Pay link for one-tap checkout.</div>
+                </div>
+              </div>
+              <div>
+                <div class="mini-phone" aria-hidden="true">
+                  <div class="mini-screen">
+                    <div class="mini-top">
+                      <div class="mini-av">JP</div>
+                      <div class="mini-name">Juniper &amp; Pine <svg><use href="#i-verified"/></svg></div>
+                      <div class="mini-verified">Verified business</div>
+                    </div>
+                    <div class="mini-body">
+                      <div class="rich">
+                        <div class="rich-img"></div>
+                        <div class="rich-body"><b>Sage Linen Throw</b>Back in stock, $128</div>
+                      </div>
+                      <div style="background:#f3f3f3;border-radius:16px;padding:9px 12px;max-width:205px">Hi Dana, the Sage Linen Throw is back at Juniper &amp; Pine. We’re holding one for you until Sunday. Want it shipped to your saved address?</div>
+                      <div class="chips"><span>Ship it to me</span><span>I’ll pick it up</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP ================= -->
+<section class="sec sec-canvas" id="roadmap" aria-labelledby="roadmap-title">
+  <div class="wrap">
+    <h2 id="roadmap-title">Light first. Full when it’s earned.</h2>
+    <p class="lede">A light MVNO gets Shopify to market in months, using a partner’s core on a host network. Once merchants prove the demand, Shopify moves to its own cloud-native core. That’s the step that puts Sidekick inside the call. I’ve run both models, and I helped launch a US MVNO on a cloud-native core at mobi.<sup><a href="#s10">10</a></sup></p>
+
+    <ol class="phases">
+      <li class="phase">
+        <div class="phase-when">Phase 1, months 0–3</div>
+        <h3>Deals and design</h3>
+        <p>Shortlist MVNE and host partners across AT&amp;T, T-Mobile and Verizon. Negotiate wholesale rates, numbering and porting. Cover the regulatory basics: 911, customer data rules, taxes and fees. Design the admin surfaces with the POS, Customers and Sidekick teams.</p>
+      </li>
+      <li class="phase">
+        <div class="phase-when">Phase 2, months 3–9</div>
+        <h3>US launch as a light MVNO</h3>
+        <p>Shopify-branded SIMs and eSIMs through an MVNE. A business line in every plan, paid work lines for merchants’ employees, and device SIMs for POS hardware. Call logs, voicemail transcription and summaries on the business line.</p>
+      </li>
+      <li class="phase">
+        <div class="phase-when">Phase 3, months 9–18</div>
+        <h3>Prove it</h3>
+        <p>Pilot to general availability against clear gates: attach rate, lines per merchant, churn of merchants with lines against those without, number ports and add-on conversion. Then a go or no-go on the full build.</p>
+      </li>
+      <li class="phase full">
+        <div class="phase-when">Phase 4, months 18–36</div>
+        <h3>Full MVNO</h3>
+        <p>Shopify’s own cloud-native core, its own SIM profiles and more than one host network. Sidekick in the call path, verified calling and RCS business messaging. Canada next, where I’ve already negotiated with every national carrier.</p>
+      </li>
+    </ol>
+
+    <div class="tablewrap-lg">
+      <table class="compare">
+        <caption class="visually-hidden">Light MVNO compared with full MVNO</caption>
+        <thead>
+          <tr><th scope="col"><span class="visually-hidden">Dimension</span></th><th scope="col">Light MVNO<small>How Shopify launches</small></th><th scope="col">Full MVNO<small>Where Shopify ends up</small></th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Core network</th><td>The MVNE’s or host carrier’s</td><td>Shopify’s own, run in the cloud as a service</td></tr>
+          <tr><th scope="row">SIMs</th><td>Shopify-branded, on the partner’s number ranges</td><td>Shopify’s own SIM identities and profiles</td></tr>
+          <tr><th scope="row">Calls</th><td>Logs, forwarding and voicemail through partner APIs; AI on the business line</td><td>Every call routes through Shopify: live AI, recording with consent, transcription</td></tr>
+          <tr><th scope="row">Networks</th><td>One host carrier</td><td>Several host carriers, switchable</td></tr>
+          <tr><th scope="row">Time to market</th><td>Months</td><td>12 to 24 months, faster on a cloud-native core</td></tr>
+          <tr><th scope="row">Upfront cost</th><td>Low; mostly per-line fees</td><td>Higher: core, integration and certification</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= NUMBERS ================= -->
+<section class="sec" id="numbers" aria-labelledby="numbers-title">
+  <div class="wrap">
+    <h2 id="numbers-title">Run the numbers yourself.</h2>
+    <p class="lede">An illustrative model, not a forecast. Change the assumptions and the totals update. The business line is free to merchants, so its network cost comes out of gross profit.</p>
+
+    <div class="calc">
+      <form class="calc-inputs" id="calc" onsubmit="return false">
+        <div class="field">
+          <label for="f-merchants">US merchants using Shopify Wireless <output for="f-merchants" id="o-merchants">100,000</output></label>
+          <input type="range" id="f-merchants" min="25000" max="500000" step="5000" value="100000">
+          <p class="hint">For scale, there are 36.2 million small businesses in the US.<sup><a href="#s11">11</a></sup></p>
+        </div>
+        <div class="field">
+          <label for="f-staff">Paid employee lines per merchant <output for="f-staff" id="o-staff">1.5</output></label>
+          <input type="range" id="f-staff" min="0" max="5" step="0.5" value="1.5">
+          <p class="hint">$20 a month per line.</p>
+        </div>
+        <div class="field">
+          <label for="f-devices">Device SIMs per merchant <output for="f-devices" id="o-devices">1</output></label>
+          <input type="range" id="f-devices" min="0" max="4" step="0.5" value="1">
+          <p class="hint">$8 a month per POS device.</p>
+        </div>
+        <div class="field">
+          <label for="f-ai">Merchants adding Sidekick for calls <output for="f-ai" id="o-ai">20%</output></label>
+          <input type="range" id="f-ai" min="0" max="60" step="5" value="20">
+          <p class="hint">$29 a month, at a 75% software margin.</p>
+        </div>
+        <div class="field">
+          <label for="f-margin">Gross margin on connectivity <output for="f-margin" id="o-margin">35%</output></label>
+          <input type="range" id="f-margin" min="15" max="60" step="5" value="35">
+          <p class="hint">Light MVNO margins sit at the low end; owning the core moves them up. The free business line costs about $5 a month to carry.</p>
+        </div>
+      </form>
+
+      <div class="calc-out" aria-live="polite">
+        <p class="out-label">Annual revenue run rate</p>
+        <div class="out-main" id="r-arr">$52.6M</div>
+        <div class="out-grid">
+          <div><strong id="r-gp">$15.2M</strong><span>Gross profit a year, after free lines</span></div>
+          <div><strong id="r-lines">350,000</strong><span>Lines and SIMs on the network</span></div>
+          <div><strong id="r-mrr">$4.4M</strong><span>Monthly recurring revenue</span></div>
+          <div><strong id="r-arpm">$43.80</strong><span>Revenue per merchant a month</span></div>
+        </div>
+        <p class="out-note">For reference, I helped grow Ting to 300,000+ subscribers and $125M in annual recurring revenue. Shopify starts with millions of merchants already in its admin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY ME ================= -->
+<section class="sec sec-canvas" id="me" aria-labelledby="me-title">
+  <div class="wrap">
+    <div class="split">
+      <h2 id="me-title">I’ve built this, sold it, and launched it for a brand outside telecom.</h2>
+      <div class="prose">
+        <p>Most people in telecom have done one of these jobs. Shopify Wireless needs all three: someone who can negotiate wholesale deals with US carriers, build the platform behind the plan, and bring it to market inside a brand that isn’t a phone company.</p>
+        <p>I’ve spent nearly 15 years in the US MVNO market, and I’ve been through more carrier, MVNE and partner negotiations than I can count. I know where the margin hides in a wholesale contract, what breaks during a number port, and what it takes to get someone from “I’m curious” to an active line in under a minute.</p>
+      </div>
+    </div>
+
+    <table class="ledger fit">
+      <caption class="visually-hidden">What Shopify Wireless needs, and where I have done it</caption>
+      <thead><tr><th scope="col">Shopify Wireless needs</th><th scope="col">Where I’ve done it</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Carrier and MVNE deals in the US</th><td data-label="Where I’ve done it">Co-led MVNE contracts, pricing and redlines with the CEO at mobi, on top of countless carrier, vendor and partner negotiations, mostly in the US.</td></tr>
+        <tr><th scope="row">A non-telecom brand launching mobile</th><td data-label="Where I’ve done it">Negotiated with every national carrier in Canada for Wealthsimple and launched its TELUS phone plan.</td></tr>
+        <tr><th scope="row">The platform behind the plan</th><td data-label="Where I’ve done it">Helped build Ting’s in-house billing system, now Wavelo. Shipped eSIM activation in under a minute at mobi.</td></tr>
+        <tr><th scope="row">Getting to scale</th><td data-label="Where I’ve done it">Ting: 300,000+ subscribers and $125M in annual recurring revenue.</td></tr>
+        <tr><th scope="row">Moving customers without losing them</th><td data-label="Where I’ve done it">Led the migrations of 50,000+ FreedomPop subscribers and the Solvei base into Ting.</td></tr>
+        <tr><th scope="row">A white-label platform others build on</th><td data-label="Where I’ve done it">Turned mobi’s cloud core into an MVNE and signed four partners representing over 3 million subscribers.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="roles">
+      <article class="role">
+        <div>
+          <h3 class="role-org">Uncharted Mobile</h3>
+          <p class="role-meta">Founder and principal. A boutique consultancy helping brands, carriers and MVNEs launch and grow mobile services.</p>
+        </div>
+        <div class="role-body">
+          <p>I started Uncharted Mobile to do for other companies what I’d done at Ting and mobi: get a mobile service from idea to launch without the usual years of vendor sprawl.</p>
+          <div class="engagement">
+            <h4>Wealthsimple</h4>
+            <p class="eng-meta">About a year leading its mobile strategy, from first carrier call to a live phone plan</p>
+            <ul>
+              <li>Negotiated with all of Canada’s national carriers myself and secured workable MVNO pricing.</li>
+              <li>Launched the Wealthsimple and TELUS phone plan, with discounts that scale by client tier, up to 35% off for Generation clients.<sup><a href="#s4">4</a></sup></li>
+              <li>Built the partnership forecasting model and the executive case for moving from a reseller deal to a full MVNO.</li>
+              <li>Wrote the competitive and regulatory analysis for the CPO, including the CRTC rulings that shape how a new Canadian MVNO can enter.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="role">
+        <div>
+          <h3 class="role-org">mobi</h3>
+          <p class="role-meta">Executive team, reporting to the CEO. Led product and engineering for the platform and MVNE business.</p>
+        </div>
+        <div class="role-body">
+          <p>Hawaii’s mobile carrier rebuilt itself on a public-cloud core. We launched what I believe was the first US MVNO running on a fully cloud-native core, on T-Mobile’s network,<sup><a href="#s10">10</a></sup> then turned that stack into a platform other brands could launch on.</p>
+          <ul class="figures">
+            <li><strong>4</strong><span>MVNE partners signed</span></li>
+            <li><strong>3M+</strong><span>Subscribers those partners represent</span></li>
+            <li><strong>&lt;1 min</strong><span>eSIM activation</span></li>
+          </ul>
+          <ul>
+            <li>Led a 14-person team: product, design, account management, network solutions and nine engineers.</li>
+            <li>Turned the Cisco and Working Group Two core integration into a white-label MVNE: number and SIM ranges, taxes, CRM and billing, middleware and a white-label app.</li>
+            <li>Sold the MVNE deals and co-led contract negotiations and the pricing model with the CEO, about $1.3M a month in projected revenue, working the SOWs, RFPs and redlines directly.</li>
+            <li>Shipped bring-your-own-device, a device catalog with automated inventory and returns, and automated workflows on an open-source billing stack.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="role">
+        <div>
+          <h3 class="role-org">Ting Mobile</h3>
+          <p class="role-meta">Tucows. Product leadership, with three product managers reporting to me by the time I left.</p>
+        </div>
+        <div class="role-body">
+          <p>Ting proved that a mobile brand with no stores and no subsidies could win on experience and honest pricing. I helped grow it into a nine-figure business.</p>
+          <ul class="figures">
+            <li><strong>300K+</strong><span>Subscribers</span></li>
+            <li><strong>$125M</strong><span>Annual recurring revenue</span></li>
+            <li><strong>80%</strong><span>Of activations through BYOD, a flow I designed</span></li>
+          </ul>
+          <ul>
+            <li>Helped build Ting’s in-house billing system, which avoided enterprise vendor fees and became Wavelo, now used by DISH.</li>
+            <li>Led the migration of 50,000+ FreedomPop subscribers and thousands more from Solvei after acquisitions: activation paths, device continuity and re-SIMs.</li>
+            <li>Built the creator sponsorship engine behind The Joe Rogan Experience, Linus Tech Tips, Stone Cold Steve Austin and others: landing pages, promo links, sign-up and creator payouts. Podcasts alone drove more than 25,000 activations.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 90 DAYS ================= -->
+<section class="sec" id="plan" aria-labelledby="plan-title">
+  <div class="wrap">
+    <h2 id="plan-title">My first 90 days.</h2>
+    <p class="lede">The goal by day 90 is a decision: a pilot Shopify can fund, with partners lined up and the merchant case proven.</p>
+    <ol class="days">
+      <li>
+        <div class="when">Days 1–30</div>
+        <h3>Learn the merchant</h3>
+        <p>Talk to POS, B2B and online merchants about how they handle phones, employee lines and store connectivity today. Size demand by segment, and map where Phone would meet POS, Customers, Messaging and Sidekick.</p>
+      </li>
+      <li>
+        <div class="when">Days 31–60</div>
+        <h3>Get to term sheets</h3>
+        <p>Run a competitive process across three or four MVNE and host partners. Compare light and full costs over five years, and lay out the regulatory checklist for the US launch.</p>
+      </li>
+      <li>
+        <div class="when">Days 61–90</div>
+        <h3>Bring a pilot plan</h3>
+        <p>A 50-merchant pilot with admin designs, success gates and a launch budget. A business case leadership can say yes or no to.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <h2 id="contact-title">Let’s build Shopify Wireless.</h2>
+    <p>I’d love to walk your team through this, from the carrier deals to the admin. I’m based in Oakville, Ontario, and I’ve spent most of my career in the US market, which is where this should launch first.</p>
+    <div class="hero-ctas">
+      <a class="pill pill-light" href="sms:+16475215330">Text me at 647-521-5330</a>
+      <a class="pill pill-ghost" href="tel:+16475215330">Call me</a>
+      <a class="pill pill-ghost" href="https://unchartedmobile.com">Visit Uncharted Mobile</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<section class="sources" aria-labelledby="sources-title">
+  <div class="wrap">
+    <h2 id="sources-title">Sources</h2>
+    <ol>
+      <li id="s1"><a href="https://www.sec.gov/Archives/edgar/data/0001594805/000159480526000068/shop-20260930.htm">Shopify Form 10-Q for the quarter ended September 30, 2026</a></li>
+      <li id="s2"><a href="https://gigs.com/press/klarna-expands-into-mobile-phone-plans-with-flexible-no-hassle-service-for-25m-americans">Gigs: Klarna expands into mobile phone plans</a></li>
+      <li id="s3"><a href="https://www.cablefax.com/wp-content/uploads/2026/07/cfx072326.pdf">Cablefax: Comcast Q2 2026 results and Comcast Business MVNO launch</a></li>
+      <li id="s4"><a href="https://www.iphoneincanada.ca/2026/05/21/wealthsimple-just-teased-an-apple-deal-and-a-35-telus-discount/">iPhone in Canada: Wealthsimple’s TELUS phone plan offer</a></li>
+      <li id="s5"><a href="https://connect.verifone.com/sites/default/d10-files/2025-02/victa-mobile-data-sheet_es-mx.pdf">Verifone Victa Mobile data sheet</a> and <a href="https://www.firstpier.com/resources/shopify-pos">First Pier: Shopify POS hardware and pricing</a></li>
+      <li id="s6"><a href="https://changelog.shopify.com/posts/shopify-messaging-now-supports-sms-marketing">Shopify changelog: Shopify Messaging supports SMS marketing</a> and <a href="https://changelog.shopify.com/posts/create-sms-marketing-automations-in-shopify-messaging">SMS automations</a></li>
+      <li id="s7"><a href="https://changelog.shopify.com/posts/voice-mode-is-now-available-in-sidekick">Shopify changelog: Voice mode in Sidekick</a></li>
+      <li id="s8"><a href="https://www.alpha-sense.com/earnings/shop/">AlphaSense: Shopify Q3 2026 earnings highlights</a></li>
+      <li id="s9"><a href="https://lightreading.com/cable-technology/comcast-drops-more-broadband-subs-as-restructuring-and-layoffs-loom">Light Reading: Comcast Q3 2026 broadband and mobile results</a></li>
+      <li id="s10"><a href="https://www.sdxcentral.com/articles/analysis/mobi-surfs-5g-core-on-wg2-amazon-wave/2023/01/">SDxCentral: Mobi launches on a cloud-native core from Working Group Two and AWS</a></li>
+      <li id="s11"><a href="https://advocacy.sba.gov/wp-content/uploads/2025/06/United_States_2025-State-Profile.pdf">SBA Office of Advocacy: 2025 Small Business Profile, United States</a></li>
+    </ol>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>An independent proposal by Brad Coates, Uncharted Mobile Corp. Not affiliated with or endorsed by Shopify. The admin screens are concept mockups for a fictional store, and the revenue model is illustrative.</p>
+    <p><a href="https://bradcoates.ca">bradcoates.ca</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+
+  /* ----- Tabs ----- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var captions = Array.prototype.slice.call(document.querySelectorAll('.caption'));
+  var navItems = Array.prototype.slice.call(document.querySelectorAll('.admin-nav [data-key]'));
+
+  function select(tab, focus){
+    tabs.forEach(function(t){
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    var id = tab.getAttribute('aria-controls');
+    var key = id.replace('panel-','');
+    var activePanel;
+    panels.forEach(function(p){
+      var on = p.id === id;
+      p.classList.toggle('on', on);
+      if (on) activePanel = p;
+    });
+    captions.forEach(function(c){ c.classList.toggle('on', c.getAttribute('data-for') === key); });
+    var keys = (activePanel.getAttribute('data-nav') || '').split(' ');
+    navItems.forEach(function(n){ n.classList.toggle('active', keys.indexOf(n.getAttribute('data-key')) > -1); });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function(tab, i){
+    tab.addEventListener('click', function(){ select(tab, false); });
+    tab.addEventListener('keydown', function(e){
+      var next = null;
+      if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+      if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (e.key === 'Home') next = tabs[0];
+      if (e.key === 'End') next = tabs[tabs.length - 1];
+      if (next){ e.preventDefault(); select(next, true); }
+    });
+  });
+  select(tabs[0], false);
+
+  /* ----- Calculator ----- */
+  var $ = function(id){ return document.getElementById(id); };
+  var inputs = ['f-merchants','f-staff','f-devices','f-ai','f-margin'].map($);
+  var STAFF_PRICE = 20, DEVICE_PRICE = 8, AI_PRICE = 29, AI_MARGIN = 0.75, FREE_LINE_COST = 5;
+
+  function money(n){
+    if (n >= 1e9) return '$' + (n/1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return '$' + Math.round(n/1e3) + 'K';
+    return '$' + n.toFixed(2);
+  }
+  function fill(el){
+    var p = (el.value - el.min) / (el.max - el.min) * 100;
+    el.style.setProperty('--p', p + '%');
+  }
+  function update(){
+    var m = +$('f-merchants').value;
+    var staff = +$('f-staff').value;
+    var dev = +$('f-devices').value;
+    var ai = +$('f-ai').value / 100;
+    var margin = +$('f-margin').value / 100;
+
+    $('o-merchants').textContent = m.toLocaleString('en-US');
+    $('o-staff').textContent = staff % 1 ? staff.toFixed(1) : staff;
+    $('o-devices').textContent = dev % 1 ? dev.toFixed(1) : dev;
+    $('o-ai').textContent = Math.round(ai*100) + '%';
+    $('o-margin').textContent = Math.round(margin*100) + '%';
+
+    var connPerMerchant = staff*STAFF_PRICE + dev*DEVICE_PRICE;
+    var aiPerMerchant = ai*AI_PRICE;
+    var mrr = m * (connPerMerchant + aiPerMerchant);
+    var arr = mrr * 12;
+    var gp = (m*connPerMerchant*margin + m*aiPerMerchant*AI_MARGIN - m*FREE_LINE_COST) * 12;
+    var lines = Math.round(m * (1 + staff + dev));
+
+    $('r-arr').textContent = money(arr);
+    $('r-mrr').textContent = money(mrr);
+    $('r-gp').textContent = (gp < 0 ? '−' : '') + money(Math.abs(gp));
+    $('r-lines').textContent = lines.toLocaleString('en-US');
+    $('r-arpm').textContent = '$' + (connPerMerchant + aiPerMerchant).toFixed(2);
+    inputs.forEach(fill);
+  }
+  inputs.forEach(function(el){ el.addEventListener('input', update); });
+  update();
+})();
+</script>
+</body>
+</html>
